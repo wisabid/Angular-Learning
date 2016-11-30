@@ -1,0 +1,43 @@
+<div class="container">
+	<div class="row">
+		<div class="col-md-8">
+			<div class="jumbotron">
+				<img ng-src="http://i.imgur.com/{{profile.imageUrl}}" alt="..." class="img-circle pull-right" width="65">
+				<h3>{{profile.name}}</h3>
+				<p><i>{{profile.dob | convToAge}} years old - {{profile.qualification}}</i></p>
+				<small>{{profile.abtyourself}}</small>				
+			</div>
+		</div>
+		<div class="col-md-4">
+			<img ng-src="http://i.imgur.com/{{profile.imageUrl}}" alt="..." class="img-circle pull-right" width="100%">
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<ng-form name="commForm">
+			<textarea class="form-control" rows="5" cols="100" placeholder="Enter your comment" ng-model="comment.text"></textarea>
+			
+			<input type="text" placeholder="Your Name" ng-model="comment.name" size="20">
+
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<button class="btn btn-default pull-right" ng-click="addComment(comment)">Post Comment</button>
+				</div>
+			</div>
+		</ng-form>
+	</div>
+	<div class="col-md-6">
+		<div ng-repeat="comm in profile.comments" ng-class-odd="'odd'" ng-class-even="'even'" class="comments" style="padding:5px;margin:5px 0;">
+			<i>{{comm.text}} - {{comm.name}} </i>
+		</div>
+
+		<div ng-show="commentlook || comment.text.length">
+			<h4>Your Comment would appear like this - </h4>
+			<div class="comments" style="padding:5px;margin:5px 0;background-color:#eee" ng-show="{true:(comment.text.length > 0)}">
+				<i>{{comment.text}} - {{comment.name}} </i>
+			</div>
+		</div>
+		<h4 ng-show="!commentlook && !comment.text.length"><span class="glyphicon glyphicon-arrow-up"></span></h4>
+	</div>
+</div>
+</div>

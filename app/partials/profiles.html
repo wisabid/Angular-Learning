@@ -1,0 +1,77 @@
+<div ng-show="overlay.message" class="overlay">
+	<p class="message" ng-bind="overlay.message"></p>
+</div>
+<div class="container">
+	<div class="row">
+		<div class="col-md-4">
+			Search By <input type="text" class="form-control" ng-model="searchBy">
+		</div>
+		<div class="col-md-4">
+			Order By
+			<select class="form-control" ng-model="orderBy" style="margin:5px 0;">
+				<option value="name">Name</option>
+				<option value="age">Age</option>
+				<option value="qualification">Qualification</option>
+			</select>
+		</div>
+		<div class="col-md-4">
+			Limit to
+			<select class="form-control" ng-model="limitTo" style="margin:5px 0;">
+				<option value="3">3</option>
+				<option value="6">6</option>
+				<option value="9">9</option>
+				<option value="12">12</option>
+				<option value="30">30</option>
+			</select>
+		</div>
+
+	</div>
+	
+	<div class="row">
+		<div ng-repeat="profile in profiles | filter : {name : searchBy} | orderBy : orderBy | limitTo : limitTo || 6">
+			<div class="col-md-4" ng-show="!dontneed">
+				<div class="jumbotron" ng-show="!editMode" ng-class-even="'even'" ng-class-odd="'odd'">
+					<a class="btn pull-right" ng-click="dontneed=true"><span class="glyphicon glyphicon-remove"></span></a>
+					<img ng-src="http://i.imgur.com/{{profile.imageUrl}}" alt="..." class="img-circle pull-right" width="65">
+					<h3>{{profile.name}}</h3>
+					<p><i>{{profile.dob | convToAge}} years old - {{profile.qualification}}</i></p>
+					<small ng-hide="showmore">{{profile.abtyourself | limitTo : abtLimit}}</small>
+					<small ng-show="showmore">{{profile.abtyourself}}</small>
+					<span ng-show="profile.abtyourself.length > abtLimit && !showmore"><a ng-click="showmore=true" style="cursor:pointer;">...</a></span>
+					
+					<p><a class="btn btn-primary" role="button" ng-href="#/profileDetails/{{profile.id}}">More Details</a>
+						<button type="button" class="btn btn-success" ng-click="addToFav(profile);disableFav=true" ng-disabled="disableFav">Fav</button>
+						<a class="btn pull-right" ng-click="editMode=true"><span class="glyphicon glyphicon-edit"></span></a></p>
+					</div>
+					<div class="jumbotron" ng-show="editMode">
+						<a class="btn pull-right" ng-click="dontneed=true"><span class="glyphicon glyphicon-remove"></span></a>
+						<img ng-src="http://i.imgur.com/{{profile.imageUrl}}" alt="..." class="img-circle pull-right" width="65">
+						<ng-form role="form" name="editForm">
+
+						<h3><input type="text" required placeholder="Enter name" size="5" ng-model="profile.name"></h3>
+						<p><i><input type="text" required placeholder="dob in dd/mm/yyyy" size="20" ng-model="profile.dob"> years old - <input type="text" required placeholder="Enter qualification" size="15" class="form-control" ng-model="profile.qualification"></i></p>
+						<p><i><input type="text" required placeholder="Enter image Url" class="form-control" ng-model="profile.imageUrl"></i></p>
+						<small><textarea required class="form-control" placeholder="Enter description" cols="25" rows="4" ng-model="profile.abtyourself"></textarea></small>
+
+						<p><a class="btn btn-primary" role="button" ng-click="editMode=false">Done</a>
+							<a class="btn btn-primary pull-right" role="button" ng-click="editMode=false">Cancel</a></p>
+						</ng-form>
+					</div>
+					
+				</div>			
+			</div>
+			<div ng-controller="favController">
+				<div class="col-md-4">
+					<div class="jumbotron" style="background-color:skyblue;">
+						<h4>Favourites</h4>
+						<div ng-repeat="favprof in favs" style="clear:both;">
+							<img ng-src="http://i.imgur.com/{{favprof.imageUrl}}" alt="..." class="img-circle pull-right" width="45">
+							<h5><a ng-href="#/profileDetails/{{favprof.id}}"> {{favprof.name}}</a></h5>		
+							<hr />				
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
